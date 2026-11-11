@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "store": "Pichau — Galax 1-Click OC",
+      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc",
+      "enabled": true
+    },
+    {
+      "store": "Pichau — Galax 1-Click OC NAC",
+      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc-nac",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — ASUS Prime OC",
+      "url": "https://www.terabyteshop.com.br/produto/34836/placa-de-video-asus-prime-nvidia-geforce-rtx-5070-oc-edition-12gb-gddr7-dlss-ray-tracing-90yv0m10-m0na00",
+      "enabled": true
+    }
+  ]
+}
