@@ -79,23 +79,64 @@ def permitted(url):
     return parsed.scheme == "https" and parsed.hostname in ALLOWED_HOSTS
 
 
+def clean_seller(value):
+    """Reject promo text accidentally captured alongside a seller name."""
+    if isinstance(value, dict):
+        value = value.get("name")
+    if not isinstance(value, str):
+        return None
+    raw = re.sub(r"\s+", " ", value).strip(" :.;")
+    # A loja aparece muitas vezes seguida imediatamente de textos de promoção.
+    aliases = [(r"KaBuM!?", "KaBuM!"), (r"TerabyteShop", "TerabyteShop"),
+               (r"Hardstore", "Hardstore"), (r"Patoloco", "Patoloco"),
+               (r"Amazon(?:\.com\.br)?", "Amazon.com.br")]
+    for pattern, result in aliases:
+        if re.match(rf"^(?:{pattern})(?=\s|[.,;:]|$)", raw, re.I):
+            return result
+    if not (2 <= len(raw) <= 60):
+        return None
+    if re.search(r"\b(?:compre|produto|brinde|entrega|frete|suporte|promoção|desconto|estoque|cliente|garantia|parcelamento|receba|aproveite)\b", raw, re.I):
+        return None
+    return raw
+
+
 def seller_from_page(text, host):
-    top = text[:4500]
+    """Only trust the store itself or a short, unambiguous seller label.
+
+    Never assume that an item displayed on a marketplace belongs to its host.
+    """
     if host == "www.terabyteshop.com.br":
         return "TerabyteShop"
     if host == "hardstore.com.br":
         return "Hardstore"
-    for pattern in [
-        r"Vendido\s+e\s+entregue\s+por\s*:?\s*([^\n|]{2,70})",
-        r"Enviado\s+(?:de\s+e\s+)?vendido\s+por\s*:?\s*([^\n|]{2,70})",
-        r"Vendido\s+por\s*:?\s*([^\n|]{2,70})",
-    ]:
-        m = re.search(pattern, top, re.I)
-        if m:
-            seller = re.split(r"\b(?:sobre\s+o\s+produto|Comprar\s+agora|Estoque|Detalhes)\b", m.group(1), maxsplit=1, flags=re.I)[0]
-            return seller.strip(" :.;")[:70] or None
+    top = text[:4500]
+    if host == "www.kabum.com.br":
+        # Don't use a greedy capture: otherwise 'Compre este produto e ganhe BRINDE'
+        # gets appended to the merchant name, as seen in production logs.
+        if re.search(r"Vendido\s+(?:e\s+entregue\s+)?por\s*:?(?:\s*)(KaBuM!?)(?=\s|[.,;:]|$)", top, re.I):
+            return "KaBuM!"
+        return None  # Marketplace seller not verifiable in this format.
+    # Other marketplaces: require explicit name in JSON-LD, not a flattened page.
     return None
 
+
+def similar_title(a, b):
+    """Cross-check the JSON-LD Product against the actual product heading."""
+    def words(s):
+        return {x for x in re.findall(r"[a-z0-9]+", s.lower())
+                if len(x) >= 3 and x not in {"placa", "video", "geforce", "nvidia", "gddr7", "ray", "tracing", "dlss"}}
+    wa, wb = words(a), words(b)
+    brands = {"asus", "gigabyte", "msi", "galax", "zotac", "palit", "gainward", "inno3d", "colorful", "pny", "asrock"}
+    ba, bb = wa & brands, wb & brands
+    if ba and bb and ba != bb:
+        return False
+    # RTX/5070/12GB alone does not prove the page and its structured
+    # Product describe the same board. At least one distinctive token must match.
+    common = {"rtx", "5070", "12gb", "12g", "oc", "prime", "gaming", "nvidia", "geforce"}
+    da, db = wa - common, wb - common
+    if da and db and not (da & db):
+        return False
+    return bool(wa and wb and len(wa & wb) / min(len(wa), len(wb)) >= 0.55)
 
 def pix_candidate(text, base):
     """Only explicit PIX label near a single price in top product section.
@@ -162,6 +203,10 @@ def parse_product(html, url):
     # Sinal explícito de produto indisponível deve prevalecer sobre schema desatualizado.
     if re.search(r"\bproduto\s+esgotado\b|\bstatus\s*:\s*encomenda\b", main_text[:2500], re.I):
         return None, "sem estoque confirmado na página"
+    primary_heading = soup.find('h1')
+    heading_name = primary_heading.get_text(" ", strip=True) if primary_heading else ""
+    if heading_name and not valid_gpu(heading_name):
+        return None, "título principal não é RTX 5070 12 GB padrão"
     options = []
     for script in soup.select('script[type="application/ld+json"]'):
         try:
@@ -177,6 +222,8 @@ def parse_product(html, url):
             title = str(node.get("name") or "")
             if not valid_gpu(title):
                 continue
+            if heading_name and not similar_title(heading_name, title):
+                continue  # Produto relacionado, não o anúncio principal.
             offers = node.get("offers", [])
             if isinstance(offers, dict):
                 offers = [offers]
@@ -201,10 +248,8 @@ def parse_product(html, url):
                 p = price_decimal(offer.get("price") or spec.get("price") or offer.get("lowPrice"))
                 if p is None:
                     continue
-                seller = offer.get("seller") or node.get("seller")
-                if isinstance(seller, dict):
-                    seller = seller.get("name")
-                if not isinstance(seller, str) or not seller.strip():
+                seller = clean_seller(offer.get("seller") or node.get("seller"))
+                if not seller:
                     seller = seller_from_page(main_text, host)
                 if not seller:
                     # Não notificar sem identificar vendedor (evita marketplace desconhecido).
@@ -215,7 +260,7 @@ def parse_product(html, url):
                     "name": title,
                     "price": actual,
                     "price_type": "PIX explícito" if pix is not None else "preço estruturado",
-                    "seller": seller.strip()[:90],
+                    "seller": seller,
                     "url": url,
                 })
     if not options:
@@ -227,7 +272,7 @@ def get_product(entry, client=requests):
     url = entry["url"]
     if not permitted(url):
         raise ValueError("domínio não permitido")
-    response = client.get(url, timeout=18, headers={"User-Agent": "Mozilla/5.0 (compatible; RTX5070PriceRadar/2.0)"})
+    response = client.get(url, timeout=18, headers={"User-Agent": "Mozilla/5.0 (compatible; RTX5070PriceRadar/2.2)"})
     response.raise_for_status()
     if not permitted(response.url):
         raise ValueError("redirecionamento para domínio não permitido")

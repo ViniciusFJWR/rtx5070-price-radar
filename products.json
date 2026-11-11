@@ -6,6 +6,41 @@
       "enabled": true
     },
     {
+      "store": "Terabyte — Zotac Twin Edge OC",
+      "url": "https://www.terabyteshop.com.br/produto/43431/placa-de-video-zotac-gaming-nvidia-geforce-rtx-5070-twin-edge-oc-12gb-gddr7-dlss-ray-tracing-zt-b50700h-10a",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Gigabyte Windforce OC",
+      "url": "https://www.terabyteshop.com.br/produto/35379/placa-de-video-gigabyte-nvidia-geforce-rtx-5070-windforce-oc-sff-12gb-gddr7-dlss-ray-tracing-gv-n5070wf3oc-12gd",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Gigabyte Gaming OC",
+      "url": "https://www.terabyteshop.com.br/produto/34884/placa-de-video-gigabyte-nvidia-geforce-rtx-5070-gaming-oc-12gb-gddr7-dlss-ray-tracing-gv-n5070gaming-oc-12gd",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Colorful RTX 5070 Gaming",
+      "url": "https://www.terabyteshop.com.br/produto/44309/placa-de-video-colorful-nvidia-geforce-rtx-5070-gaming-12gb-v-gddr7-dlss-ray-tracing",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Gainward Phoenix GS",
+      "url": "https://www.terabyteshop.com.br/produto/43482/placa-de-video-gainward-nvidia-geforce-rtx-5070-phoenix-gs-12gb-gddr7-dlss-ray-tracing-ne75070t19k9-gb2050x",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Gigabyte Eagle OC",
+      "url": "https://www.terabyteshop.com.br/produto/34888/placa-de-video-gigabyte-nvidia-geforce-rtx-5070-eagle-oc-sff-12gb-gddr7-dlss-ray-tracing-gv-n5070eagle-oc-12gd",
+      "enabled": true
+    },
+    {
+      "store": "Terabyte — Palit Infinity 3",
+      "url": "https://www.terabyteshop.com.br/produto/35242/placa-de-video-palit-nvidia-geforce-rtx-5070-infinity-3-12gb-gddr7-dlss-ray-tracing-ne75070019k9-gb2050s",
+      "enabled": true
+    },
+    {
       "store": "KaBuM! — ASUS Dual OC",
       "url": "https://www.kabum.com.br/produto/870969/placa-de-video-asus-dual-rtx-5070-oc-12g-nvidia-geforce-12gb-gddr7-opengl-4-6-2572mhz-dlss-4-90yv0m17-m0na00",
       "enabled": true
