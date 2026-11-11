@@ -1,0 +1,25 @@
+
+name: Testar Telegram
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enviar mensagem
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          test -n "$TOKEN" && test -n "$CHAT_ID"
+          curl --fail --silent --show-error \
+            --request POST \
+            "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${CHAT_ID}" \
+            --data-urlencode "text=RTX 5070 Price Radar: notificacoes funcionando!" \
+            > /dev/null
