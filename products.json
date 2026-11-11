@@ -1,18 +1,53 @@
 {
   "products": [
     {
-      "store": "Pichau — Galax 1-Click OC",
-      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc",
-      "enabled": true
-    },
-    {
-      "store": "Pichau — Galax 1-Click OC NAC",
-      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc-nac",
-      "enabled": true
-    },
-    {
       "store": "Terabyte — ASUS Prime OC",
       "url": "https://www.terabyteshop.com.br/produto/34836/placa-de-video-asus-prime-nvidia-geforce-rtx-5070-oc-edition-12gb-gddr7-dlss-ray-tracing-90yv0m10-m0na00",
+      "enabled": true
+    },
+    {
+      "store": "KaBuM! — ASUS Dual OC",
+      "url": "https://www.kabum.com.br/produto/870969/placa-de-video-asus-dual-rtx-5070-oc-12g-nvidia-geforce-12gb-gddr7-opengl-4-6-2572mhz-dlss-4-90yv0m17-m0na00",
+      "enabled": true
+    },
+    {
+      "store": "KaBuM! — MSI Ventus 2X OC",
+      "url": "https://www.kabum.com.br/produto/1078276/placa-de-video-nvidia-msi-rtx-5070-12gb-gddr7-192bits-ventus-2x-oc-black-msi-912-v532-269",
+      "enabled": true
+    },
+    {
+      "store": "Magalu — Gigabyte Eagle OC (seller Kabum)",
+      "url": "https://www.magazineluiza.com.br/placa-de-video-gigabyte-rtx-5070-eagle-oc-sff-12g-nvidia-geforce-12gb-gddr7-192bits-rgb-dlss-ray-tracing-gv-n5070eagle-oc-12gd/p/jc71c7h54d/in/pcvd/?seller_id=kabum",
+      "enabled": true
+    },
+    {
+      "store": "Amazon BR — ASUS Prime White OC (marketplace)",
+      "url": "https://www.amazon.com.br/ASUS-gr%C3%A1fica-SFF-Ready-2-5-Slot-Axial-Tech/dp/B0FFKWFMYM",
+      "enabled": true
+    },
+    {
+      "store": "Hardstore — Zotac Twin Edge OC",
+      "url": "https://hardstore.com.br/shop/products/placa-de-video-zotac-gaming-geforce-rtx-5070-twin-edge-oc-12gb-gddr7-pci-e-5-0-x16-zt-b50700h-10a",
+      "enabled": true
+    },
+    {
+      "store": "Pichau — Galax 1-Click OC (bloqueio 403; desativada)",
+      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc",
+      "enabled": false
+    },
+    {
+      "store": "Pichau — Galax 1-Click OC NAC (bloqueio 403; desativada)",
+      "url": "https://www.pichau.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-57non7mdbroc-nac",
+      "enabled": false
+    },
+    {
+      "store": "Patoloco — Galax RTX 5070 1-Click OC",
+      "url": "https://patoloco.com.br/placa-de-video-galax-geforce-rtx-5070-1-click-oc-12gb-gddr7-192-bit-dlss4-57non7mdbroc",
+      "enabled": true
+    },
+    {
+      "store": "Patoloco — INNO3D RTX 5070 Twin X2 OC",
+      "url": "https://patoloco.com.br/placa-de-video-inno3d-nvidia-geforce-rtx-5070-twin-x2-oc-12gb-gddr7-dlss-ray-tracing-n50702-12d7x-195064n",
       "enabled": true
     }
   ]
